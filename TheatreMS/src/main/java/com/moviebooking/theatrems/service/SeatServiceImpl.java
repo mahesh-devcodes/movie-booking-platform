@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.moviebooking.theatrems.entity.Seat;
+import com.moviebooking.theatrems.exception.SeatNotFoundException;
 import com.moviebooking.theatrems.repository.SeatRepository;
 
 @Service
@@ -29,13 +30,13 @@ public class SeatServiceImpl implements SeatService {
 	public Seat getSeatById(Long seatId) {
 		
 		return seatRepo.findById(seatId).
-				orElseThrow(()->new RuntimeException("Seat not found with Id"+seatId));
+				orElseThrow(()->new SeatNotFoundException("Seat not found with Id"+seatId));
 	}
 
 	@Override
 	public Seat updateSeat(Long seatId, Seat seat) {
 		Seat existingSeat=seatRepo.findById(seatId)
-				.orElseThrow(()->new RuntimeException("Seat not found with ID"+seatId));
+				.orElseThrow(()->new SeatNotFoundException("Seat not found with ID"+seatId));
 		
 		existingSeat.setSeatNumber(seat.getSeatNumber());
 		existingSeat.setSeatType(seat.getSeatType());
@@ -47,7 +48,7 @@ public class SeatServiceImpl implements SeatService {
 	@Override
 	public void deleteSeat(Long seatId) {
 		Seat existingSeat=seatRepo.findById(seatId)
-				.orElseThrow(()->new RuntimeException("Seat not found with ID"+seatId));
+				.orElseThrow(()->new SeatNotFoundException("Seat not found with ID"+seatId));
 		seatRepo.delete(existingSeat);
 	}
 

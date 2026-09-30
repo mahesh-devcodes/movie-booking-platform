@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.moviebooking.theatrems.entity.Screen;
+import com.moviebooking.theatrems.exception.ScreenNotFoundException;
 import com.moviebooking.theatrems.repository.ScreenRepository;
 
 @Service
@@ -27,13 +28,16 @@ public class ScreenServiceImpl implements ScreenService {
 	@Override
 	public Screen getScreenById(Long screenId) {
 		return screenRepo.findById(screenId)
-				.orElseThrow(()-> new RuntimeException("Screen not found with ID:"+screenId));
+				.orElseThrow(()-> 
+				new ScreenNotFoundException(
+						"Screen not found with ID:"+screenId));
 	}
 
 	@Override
 	public Screen updateScreen(Long screenId, Screen screen) {
 		Screen existingScreen=screenRepo.findById(screenId)
-				.orElseThrow(()->new RuntimeException("Screen not found with ID:"+screenId));
+				.orElseThrow(()->new ScreenNotFoundException(
+						"Screen not found with ID:"+screenId));
 		
 		existingScreen.setScreenName(screen.getScreenName());
 		existingScreen.setScreenType(screen.getScreenType());
@@ -46,7 +50,9 @@ public class ScreenServiceImpl implements ScreenService {
 	@Override
 	public void deleteScreen(Long screenId) {
 		Screen existingScreen=screenRepo.findById(screenId)
-				.orElseThrow(()->new RuntimeException("Screen not found with ID:" +screenId));
+				.orElseThrow(()->new ScreenNotFoundException(
+						"Screen not found with ID:" +screenId));
+		
 		screenRepo.delete(existingScreen);
 	}
 

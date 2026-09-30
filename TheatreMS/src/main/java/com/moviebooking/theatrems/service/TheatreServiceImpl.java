@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.moviebooking.theatrems.entity.Theatre;
+import com.moviebooking.theatrems.exception.TheatreNotFoundException;
 import com.moviebooking.theatrems.repository.TheatreRepository;
 
 @Service
@@ -29,14 +30,14 @@ public class TheatreServiceImpl implements TheatreService {
     @Override
     public Theatre getTheatreById(Long theatreId) {
         return theatreRepository.findById(theatreId)
-                .orElseThrow(() -> new RuntimeException("Theatre not found"));
+                .orElseThrow(() -> new TheatreNotFoundException("Theatre not found"));
     }
 
     @Override
     public Theatre updateTheatre(Long theatreId, Theatre theatre) {
 
         Theatre existingTheatre = theatreRepository.findById(theatreId)
-                .orElseThrow(() -> new RuntimeException("Theatre not found"));
+                .orElseThrow(() -> new TheatreNotFoundException("Theatre not found"));
 
         existingTheatre.setName(theatre.getName());
         existingTheatre.setCity(theatre.getCity());
@@ -49,7 +50,7 @@ public class TheatreServiceImpl implements TheatreService {
     public void deleteTheatre(Long theatreId) {
 
         Theatre existingTheatre = theatreRepository.findById(theatreId)
-                .orElseThrow(() -> new RuntimeException("Theatre not found"));
+                .orElseThrow(() -> new TheatreNotFoundException("Theatre not found"));
 
         theatreRepository.delete(existingTheatre);
     }
