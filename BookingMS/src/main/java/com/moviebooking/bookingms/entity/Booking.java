@@ -35,7 +35,7 @@ public class Booking {
 	private LocalDateTime bookingDate;
 	
 	@Column(name="total_amount", nullable = false)
-	private BigDecimal TotalAmount;
+	private BigDecimal totalAmount;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(name="booking_status", nullable = false)
@@ -85,11 +85,11 @@ public class Booking {
 	}
 
 	public BigDecimal getTotalAmount() {
-		return TotalAmount;
+		return totalAmount;
 	}
 
 	public void setTotalAmount(BigDecimal totalAmount) {
-		TotalAmount = totalAmount;
+		this.totalAmount = totalAmount;
 	}
 
 	public BookingStatus getBookingStatus() {

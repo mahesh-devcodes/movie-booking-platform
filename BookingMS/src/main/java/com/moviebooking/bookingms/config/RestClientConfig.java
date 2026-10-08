@@ -14,4 +14,12 @@ public class RestClientConfig {
 				.baseUrl("http://localhost:8083")
 				.build();
 	}
+	
+	@Bean
+    public RestClient theatreRestClient() {
+
+        return RestClient.builder()
+                .baseUrl("http://localhost:8082")
+                .build();
+    }
 }

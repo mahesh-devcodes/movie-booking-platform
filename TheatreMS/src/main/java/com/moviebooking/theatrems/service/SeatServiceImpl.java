@@ -52,4 +52,26 @@ public class SeatServiceImpl implements SeatService {
 		seatRepo.delete(existingSeat);
 	}
 
+	@Override
+	public Seat updateSeatStatus(Long seatId, String seatStatus) {
+		
+		Seat seat=seatRepo.findById(seatId).orElseThrow(()->
+		new SeatNotFoundException("Seat not found with Id: " + seatId));
+		
+		if(seatStatus==null || seatStatus.isBlank()) {
+			throw new IllegalArgumentException("Seat status is required");
+		}
+		
+		if(!seatStatus.equalsIgnoreCase("Available")
+				&& !seatStatus.equalsIgnoreCase("Booked")) {
+			throw new IllegalArgumentException("Invalid seat status: " + seatStatus);
+		}
+		
+		seat.setSeatStatus(
+				seatStatus.equalsIgnoreCase("Available")? "Available" : "Booked");
+		
+		
+		return seatRepo.save(seat);
+	}
+
 }

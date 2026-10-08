@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.moviebooking.theatrems.dto.SeatStatusRequest;
 import com.moviebooking.theatrems.entity.Seat;
 import com.moviebooking.theatrems.service.SeatService;
 
@@ -50,5 +52,12 @@ public class SeatController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteSeat(@PathVariable Long seatId) {
 		seatService.deleteSeat(seatId);
+	}
+	
+	@PatchMapping("/{seatId}/status")
+	public Seat updateSeatStatus(@PathVariable Long seatId,
+								@RequestBody SeatStatusRequest request) {
+		
+		return seatService.updateSeatStatus(seatId, request.getSeatStatus());
 	}
 }

@@ -17,10 +17,10 @@ public class GlobalExceptionHandler {
 	 // Booking not found
 	@ExceptionHandler(BookingNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public Map<String, String> HandleBookingNotFound(
+	public Map<String, String> handleBookingNotFound(
 			BookingNotFoundException ex){
 		
-		Map<String, String> response=new HashMap();
+		Map<String, String> response=new HashMap<>();
 		response.put("message", ex.getMessage());
 		return response;
 	}
@@ -36,6 +36,15 @@ public class GlobalExceptionHandler {
         return response;
     }
 	
+	// Seat not found
+	@ExceptionHandler(SeatNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public Map<String, String>handleSeatNotFound(SeatNotFoundException ex){
+		Map<String, String> response=new HashMap<>();
+		response.put("message", ex.getMessage());
+		return response;
+	}
+	
 	// Validation errors
 	@ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -49,6 +58,26 @@ public class GlobalExceptionHandler {
                         .findFirst()
                         .map(error -> error.getDefaultMessage())
                         .orElse("Invalid request"));
+        return response;
+    }
+	
+	// Invalid request
+	@ExceptionHandler(IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public Map<String, String> handleIllegalArgument(IllegalArgumentException ex){
+		Map<String, String> response=new HashMap<>();
+		response.put("message", ex.getMessage());
+		return response;
+	}
+	
+	// Seat already booked / unavailable/booking already cancelled
+	@ExceptionHandler(IllegalStateException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Map<String, String> handleIllegalState(
+            IllegalStateException ex) {
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", ex.getMessage());
         return response;
     }
 	

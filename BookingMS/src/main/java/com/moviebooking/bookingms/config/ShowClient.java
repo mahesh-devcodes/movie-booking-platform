@@ -1,5 +1,6 @@
 package com.moviebooking.bookingms.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
@@ -10,11 +11,13 @@ public class ShowClient {
 	
 	private final RestClient showRestClient;
 	
-	public ShowClient(RestClient showRestClient) {
-		this.showRestClient=showRestClient;
-	}
+    public ShowClient(
+            @Qualifier("showRestClient") RestClient showRestClient) {
+
+        this.showRestClient = showRestClient;
+    }
 	
-	public ShowResponse getSHowById(Long showId) {
+	public ShowResponse getShowById(Long showId) {
 		
 		return showRestClient.get()
 				.uri("/shows/{id}",showId)

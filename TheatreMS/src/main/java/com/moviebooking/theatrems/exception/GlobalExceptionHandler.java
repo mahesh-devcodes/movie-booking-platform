@@ -45,4 +45,15 @@ public class GlobalExceptionHandler {
 
 	    return response;
 	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public Map<String, String> handleIllegalArgument(
+	        IllegalArgumentException ex) {
+
+	    Map<String, String> response = new HashMap<>();
+	    response.put("message", ex.getMessage());
+	    return response;
+	}
+	
 }
