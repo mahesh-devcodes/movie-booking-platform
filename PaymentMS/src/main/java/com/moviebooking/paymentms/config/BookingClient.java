@@ -18,8 +18,15 @@ public class BookingClient {
 		
 		return bookingRestClient
 				.get()
-				.uri("/bookings/{id}",bookingId)
+				.uri("/{id}",bookingId)
 				.retrieve()
 				.body(BookingResponse.class);
+	}
+	
+	public void confirmBooking(Long bookingId) {
+		bookingRestClient.put()
+					.uri("/{bookingId}/confirm",bookingId)
+					.retrieve()
+					.toBodilessEntity();
 	}
 }

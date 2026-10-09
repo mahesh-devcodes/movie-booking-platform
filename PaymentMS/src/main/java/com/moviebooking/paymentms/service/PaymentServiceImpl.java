@@ -40,7 +40,7 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		try {
 			booking=bookingClient.getBooking(request.getBookingId());
-		}catch (Exception e) {
+		}catch (org.springframework.web.client.HttpClientErrorException.NotFound e) {
 			throw new BookingNotFoundException("Booking not found with id: " + request.getBookingId());
 			
 		}
@@ -48,6 +48,11 @@ public class PaymentServiceImpl implements PaymentService {
 		// check booking status
 		if("cancelled".equalsIgnoreCase(booking.getBookingStatus())) {
 			throw new IllegalArgumentException("Payment cannot be made for a cancelled booking");
+		}
+		
+		// reject payment for an already confirmed booking
+		if("confirmed".equalsIgnoreCase(booking.getBookingStatus())) {
+			throw new IllegalArgumentException("Payment cannot be made for an already confirmed booking");
 		}
 		
 		// check duplicate payment
@@ -75,6 +80,11 @@ public class PaymentServiceImpl implements PaymentService {
 		
 		// save payment
 		Payment savedPayment=paymentRepo.save(payment);
+		
+		// confirm booking in BookingMS after successful payment
+		if(savedPayment.getPaymentStatus()==PaymentStatus.Success) {
+			bookingClient.confirmBooking(request.getBookingId());
+		}
 		
 		// convert to response
 		return convertToResponse(savedPayment);
@@ -118,7 +128,6 @@ public class PaymentServiceImpl implements PaymentService {
 		response.setBookingId(payment.getBookingId());
 		response.setAmount(payment.getAmount());
 		response.setPaymentMethod(payment.getPaymentMethod());
-		response.setPaymentId(payment.getPaymentId());
 		response.setPaymentStatus(payment.getPaymentStatus());
 		response.setTransactionId(payment.getTransactionId());
 		response.setPaymentDate(payment.getPaymentDate());
