@@ -5,6 +5,7 @@ import java.util.List;
 import com.moviebooking.bookingms.dto.BookingRequest;
 import com.moviebooking.bookingms.dto.BookingResponse;
 
+
 public interface BookingService {
 	
 	BookingResponse createBooking(BookingRequest request);
