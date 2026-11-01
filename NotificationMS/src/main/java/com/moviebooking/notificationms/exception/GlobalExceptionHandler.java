@@ -11,6 +11,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+
+import jakarta.validation.ConstraintViolationException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -38,6 +41,31 @@ public class GlobalExceptionHandler {
 	
 	return buildError(
 			HttpStatus.BAD_REQUEST,"Validation failed", errors);
+	}
+	
+	// Handle path variable validation errors
+	@ExceptionHandler(ConstraintViolationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public Map<String, Object> handleConstraintViolation(
+			ConstraintViolationException ex){
+		Map<String, String> errors=new HashMap<>();
+		ex.getConstraintViolations().forEach(violation ->
+		errors.put(violation.getPropertyPath().toString(),
+				violation.getMessage()));
+		
+		return buildError(
+				HttpStatus.BAD_REQUEST,
+				"Path variable validation failed", errors);
+	}
+	
+	// Handle spring MVC method validation errors
+	
+	@ExceptionHandler(HandlerMethodValidationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public Map<String, Object> handleMethodValidation(HandlerMethodValidationException ex){
+		
+		return buildError(
+				HttpStatus.BAD_REQUEST, "Path variable validation failed", new HashMap<>());
 	}
 	
 	// Handle invalid JSON and enum values
