@@ -2,6 +2,8 @@ package com.moviebooking.notificationms.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,6 +101,11 @@ public class NotificationServiceImpl implements NotificationService {
 		
 		return notificationRepo.findById(notificationId)
 				.orElseThrow(()-> new NotificationNotFoundException("Notification not found with Id: " + notificationId));
+	}
+
+	@Override
+	public Page<Notification> getAllNotifications(Pageable pageable) {
+		return notificationRepo.findAll(pageable);
 	}
 
 }

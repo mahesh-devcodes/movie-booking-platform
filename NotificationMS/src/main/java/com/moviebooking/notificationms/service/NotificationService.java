@@ -2,6 +2,9 @@ package com.moviebooking.notificationms.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.moviebooking.notificationms.dto.NotificationRequest;
 import com.moviebooking.notificationms.entity.Notification;
 
@@ -19,4 +22,5 @@ public interface NotificationService {
 	Notification markAsRead(Long notificationId);
 	
 	void deleteNotification(Long notificationId);
+	Page<Notification> getAllNotifications(Pageable pageable);
 }
